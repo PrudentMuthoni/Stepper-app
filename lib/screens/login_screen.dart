@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stepper/screens/signup_screen.dart';
+
 class LoginScreen  extends StatefulWidget{
   const LoginScreen({super.key});
   @override
@@ -18,13 +20,15 @@ class _LoginScreenState extends State<LoginScreen>{
 
   @override
   Widget build(BuildContext context) {
+  
      return Scaffold(
+      appBar: AppBar(title: Text('Login')),
       body: SafeArea(child: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(24),
         child: Form(
           key: _loginFormKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset("assets/images/logo.png", width: 160, height:160),
             SizedBox(height: 16,),
@@ -44,9 +48,12 @@ class _LoginScreenState extends State<LoginScreen>{
                 if(value==null || value.isEmpty){
                   return "Enter your email";
                 }
-                if (!value.contains("@")){
+                else if (!value.contains("@")){
                   return "Enter a valid Email";
                 }
+                else if( value.length<=6){
+                    return "Email must have a minimum of 6 characters";
+                  }
                 return null;
               },
               keyboardType: TextInputType.emailAddress,
@@ -83,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen>{
               style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepPurple,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8)
+                borderRadius: BorderRadius.circular(7)
               )
              ),
              child: Text('Login',
@@ -96,7 +103,9 @@ class _LoginScreenState extends State<LoginScreen>{
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Not yet registered?'),
-                TextButton(onPressed: (){}, child: Text('Sign Up'))
+                TextButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const SignupScreen(),),);
+                }, child: Text('Sign Up'))
               ],
              )
           ],
@@ -104,4 +113,10 @@ class _LoginScreenState extends State<LoginScreen>{
       )),
      );
   }
-}
+     @override
+    void dispose(){
+      _emailController.dispose();
+      _passwordController.dispose();
+      super.dispose();
+    }
+ }
