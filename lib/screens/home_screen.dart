@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:stepper/model/product.dart';
+import 'package:stepper/screens/product_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() {
@@ -56,7 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
 class _HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("Home"));
+    return ListView.builder(
+      itemCount: dummyProducts.length,
+      itemBuilder: (context, index){
+        final currentProducts=dummyProducts[index];
+        return ProductCard(product: currentProducts);
+      },
+    );
   }
 }
 
