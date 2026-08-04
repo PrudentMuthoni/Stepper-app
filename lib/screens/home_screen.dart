@@ -14,8 +14,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   String _tabTitle = "Home";
-  final List<Widget> _tabs = [_HomeTab(), _OrdersTab(), _ProfileTab()];
-  final List<String> _titles = ["Home", "Orders", "Profile"];
+  final List<Widget> _tabs = [_HomeTab(),_CartTab(), _OrdersTab(), _ProfileTab()];
+  final List<String> _titles = ["Home","Cart", "Orders", "Profile"];
 
   void _onTabClicked(int index){
     setState(() {
@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: Text(_tabTitle)),
       body: IndexedStack(index: _selectedIndex, children: _tabs),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         backgroundColor:  const Color.fromARGB(255, 223, 154, 212),
         currentIndex: _selectedIndex,
         onTap: _onTabClicked,
@@ -38,6 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart_outlined),
+            activeIcon: Icon(Icons.shopping_cart),
+            label: 'Cart',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag_outlined),
@@ -59,12 +65,20 @@ class _HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      physics: ClampingScrollPhysics(),
       itemCount: dummyProducts.length,
       itemBuilder: (context, index){
         final currentProducts=dummyProducts[index];
         return ProductCard(product: currentProducts);
       },
     );
+  }
+}
+
+class _CartTab extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text("Cart"));
   }
 }
 

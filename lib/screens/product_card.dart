@@ -23,7 +23,7 @@ class ProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.name),
+                  Text(product.name, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
 
                   Text(product.description),
