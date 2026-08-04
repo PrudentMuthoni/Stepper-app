@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stepper/model/cart.dart';
 import 'package:stepper/model/product.dart';
 
 class ProductCard extends StatelessWidget {
@@ -23,13 +25,35 @@ class ProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.name, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                  Text(
+                    product.name,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(height: 8),
 
                   Text(product.description),
                   SizedBox(height: 5),
 
-                  Text('KES ${product.price}', style: TextStyle(color:Color.fromARGB(255, 23, 47, 152))),
+                  Row(
+                    children: [
+                      Text(
+                        'KES ${product.price}',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 23, 47, 152),
+                        ),
+                      ),
+                      Spacer(flex: 1),
+                      IconButton(
+                        onPressed: () {
+                          Provider.of<CartModel>(
+                            context,
+                            listen: false,
+                          ).addItem(product);
+                        },
+                        icon: Icon(Icons.shopping_cart_outlined, size: 20),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

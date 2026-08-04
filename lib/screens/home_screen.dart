@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stepper/model/cart.dart';
 import 'package:stepper/model/product.dart';
 import 'package:stepper/screens/product_card.dart';
 
@@ -14,13 +16,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   String _tabTitle = "Home";
-  final List<Widget> _tabs = [_HomeTab(),_CartTab(), _OrdersTab(), _ProfileTab()];
-  final List<String> _titles = ["Home","Cart", "Orders", "Profile"];
+  final List<Widget> _tabs = [
+    _HomeTab(),
+    _CartTab(),
+    _OrdersTab(),
+    _ProfileTab(),
+  ];
+  final List<String> _titles = ["Home", "Cart", "Orders", "Profile"];
 
-  void _onTabClicked(int index){
+  void _onTabClicked(int index) {
     setState(() {
-      _selectedIndex=index;
-      _tabTitle=_titles[index];
+      _selectedIndex = index;
+      _tabTitle = _titles[index];
     });
   }
 
@@ -31,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: IndexedStack(index: _selectedIndex, children: _tabs),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor:  const Color.fromARGB(255, 223, 154, 212),
+        backgroundColor: const Color.fromARGB(255, 223, 154, 212),
         currentIndex: _selectedIndex,
         onTap: _onTabClicked,
         items: [
@@ -67,18 +74,33 @@ class _HomeTab extends StatelessWidget {
     return ListView.builder(
       physics: ClampingScrollPhysics(),
       itemCount: dummyProducts.length,
-      itemBuilder: (context, index){
-        final currentProducts=dummyProducts[index];
+      itemBuilder: (context, index) {
+        final currentProducts = dummyProducts[index];
         return ProductCard(product: currentProducts);
       },
     );
   }
 }
 
-class _CartTab extends StatelessWidget{
+class _CartTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("Cart"));
+    return Consumer<CartModel>(
+      builder: (context, cart, child) {
+        if (cart.items.isEmpty) {
+          return Center(child: Text("Your cart is empty"));
+        }
+
+        return ListView.builder(
+          itemCount: cart.items.length,
+          itemBuilder: (context, index) {
+            
+            final item = cart.items[index];
+            return ProductCard(product: item);
+          },
+        );
+      },
+    );
   }
 }
 
