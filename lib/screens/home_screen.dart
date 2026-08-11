@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stepper/model/cart.dart';
 import 'package:stepper/model/product.dart';
+import 'package:stepper/screens/cart_card.dart';
 import 'package:stepper/screens/product_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,7 +35,26 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_tabTitle)),
+      appBar: AppBar(
+        title: Column(
+          children: [
+            Text(_tabTitle),
+            Row(
+              children: [
+                Spacer(flex: 1),
+                Consumer<CartModel>(
+                  builder: (context, cart, child) {
+                    return Text(
+                      'KES ${cart.getTotalCost()}',
+                      style: TextStyle(fontSize: 12),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
       body: IndexedStack(index: _selectedIndex, children: _tabs),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -94,9 +114,16 @@ class _CartTab extends StatelessWidget {
         return ListView.builder(
           itemCount: cart.items.length,
           itemBuilder: (context, index) {
-            
             final item = cart.items[index];
-            return ProductCard(product: item);
+            return CartCard(
+              cartItem: item,
+              decrement: () {
+                cart.decrement(item.product);
+              },
+              increment: () {
+                cart.increment(item.product);
+              },
+            );
           },
         );
       },
