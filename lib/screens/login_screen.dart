@@ -12,7 +12,7 @@ class LoginScreen  extends StatefulWidget{
 
 class _LoginScreenState extends State<LoginScreen>{
   final _loginFormKey=GlobalKey<FormState>();
-  final _emailController=TextEditingController();
+  final _usernameController=TextEditingController();
   final _passwordController=TextEditingController();
   bool _hidePassword=true;
 
@@ -39,20 +39,20 @@ class _LoginScreenState extends State<LoginScreen>{
             SizedBox(height: 16),
             
             TextFormField(
-              controller: _emailController,
+              controller: _usernameController,
               decoration: InputDecoration(
-                labelText: 'Email',
-                prefixIcon: Icon(Icons.email_outlined),
+                labelText: 'Usermame',
+                prefixIcon: Icon(Icons.person_2_outlined),
                 border: OutlineInputBorder()
               ),validator: (value) {
                 if(value==null || value.isEmpty){
-                  return "Enter your email";
+                  return "Enter your username";
                 }
                 else if (!value.contains("@")){
-                  return "Enter a valid Email";
+                  return "Enter a valid username";
                 }
                 else if( value.length<=6){
-                    return "Email must have a minimum of 6 characters";
+                    return "Username must have a minimum of 6 characters";
                   }
                 return null;
               },
@@ -115,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen>{
   }
      @override
     void dispose(){
-      _emailController.dispose();
+      _usernameController.dispose();
       _passwordController.dispose();
       super.dispose();
     }
