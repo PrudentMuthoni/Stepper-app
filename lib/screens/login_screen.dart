@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stepper/screens/home_screen.dart';
 import 'package:stepper/screens/signup_screen.dart';
+import 'package:stepper/view_model/auth_view_model.dart';
 
 class LoginScreen  extends StatefulWidget{
   const LoginScreen({super.key});
@@ -82,9 +85,30 @@ class _LoginScreenState extends State<LoginScreen>{
             ),
             SizedBox(height: 16,),
 
-            ElevatedButton(onPressed: (){
+            Consumer<AuthViewModel>(builder: (context, authViewModel, child){
+              return ElevatedButton(onPressed: () async{
               if(_loginFormKey.currentState!.validate()){
-                //perform login and navigate tp homescreen
+                var success =await authViewModel.login(
+                  _usernameController.text, 
+                  _passwordController.text
+                  );
+                  if(!context.mounted)return;
+                  if (success){
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (_)=> HomeScreen()),
+                    );
+                  }
+                  else{
+                    SnackBar snackBar =SnackBar(content: Text(
+                      authViewModel.errorMessage?? "Login failed ",
+                    ),
+                    );
+                    ScaffoldMessenger.of(
+                      context, 
+                    ).showSnackBar(snackBar);
+                    
+                  }
               }
             },
               style: ElevatedButton.styleFrom(
@@ -93,9 +117,15 @@ class _LoginScreenState extends State<LoginScreen>{
                 borderRadius: BorderRadius.circular(7)
               )
              ),
-             child: Text('Login',
+             child: authViewModel.isLoading
+             ? CircularProgressIndicator():
+              Text('Login',
              style: TextStyle(color:Colors.white),),
-             ),
+             );
+
+
+            },
+            ),
 
              SizedBox(height: 16,),
 
